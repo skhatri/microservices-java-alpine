@@ -38,13 +38,22 @@ create_tag
 if [[ ! -z ${version} ]];
 then
   source project.properties
-  image_version_tag="${owner}/${project}:${version}"
-  image_latest_tag="${owner}/${project}:latest"
-  echo building ${image_version_tag}
-  docker build --no-cache -t ${image_version_tag} .
-  docker push ${image_version_tag}
-  docker tag ${image_version_tag} ${image_latest_tag}
-  docker push ${image_latest_tag}
+  for t in "11" "17" ""
+  do
+    project="microservices-java${t}-alpine"
+    image_version_tag="${owner}/${project}:${version}"
+    image_latest_tag="${owner}/${project}:latest"
+    echo building ${image_version_tag}
+    pkg=zulu${t}
+    if [[ "$t" == "" ]]; then 
+      pkg="zulu11"
+    fi;
+    docker build --no-cache -t ${image_version_tag} . --build-arg ZULU_PKG=${pkg}
+    docker push ${image_version_tag}
+    docker tag ${image_version_tag} ${image_latest_tag}
+    docker push ${image_latest_tag}
+  done;
+
   now=$(date '+%Y-%m-%dT%H:%M:%S%z')
 
 

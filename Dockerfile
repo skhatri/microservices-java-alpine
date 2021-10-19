@@ -1,6 +1,7 @@
 FROM alpine:3.14.2
 
 LABEL base=alpine engine=jvm version=java11 timezone=UTC port=8080 dir=/opt/app user=app
+ARG ZULU_PKG="zulu11"
 
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
@@ -8,9 +9,9 @@ ENV LC_ALL en_US.UTF-8
 
 RUN apk update && wget -P /etc/apk/keys/ https://cdn.azul.com/public_keys/alpine-signing@azul.com-5d5dc44c.rsa.pub && \
     echo "https://repos.azul.com/zulu/alpine" >> /etc/apk/repositories && \
-    apk --no-cache add zulu11-jdk
+    apk --no-cache add ${ZULU_PKG}-jdk
 
-ENV JAVA_HOME=/usr/lib/jvm/zulu11-ca
+ENV JAVA_HOME=/usr/lib/jvm/${ZULU_PKG}-ca
 
 RUN apk update && apk add --no-cache tzdata curl bash gcompat && rm -rf /var/cache/apk/*
 ENV TZ=UTC
