@@ -49,18 +49,18 @@ then
       pkg="zulu11"
     fi;
     docker build --no-cache -t ${image_version_tag} . --build-arg ZULU_PKG=${pkg}
-    echo "docker push ${image_version_tag}"
-    echo "docker tag ${image_version_tag} ${image_latest_tag}"
-    echo "docker push ${image_latest_tag}"
+    docker push ${image_version_tag}
+    docker tag ${image_version_tag} ${image_latest_tag}
+    docker push ${image_latest_tag}
   done;
 
   now=$(date '+%Y-%m-%dT%H:%M:%S%z')
 
 
-  # git config --global user.email "${email}"
-  # git config --global user.name "${name}"
+  git config --global user.email "${email}"
+  git config --global user.name "${name}"
 
-  # git tag -m "{\"author\":\"ci\", \"branch\":\"$current_branch\", \"hash\": \"${current_hash}\", \"version\":\"${version}\",  \"build_date\":\"${now}\"}"  ${version}
-  # git push --tags
+  git tag -m "{\"author\":\"ci\", \"branch\":\"$current_branch\", \"hash\": \"${current_hash}\", \"version\":\"${version}\",  \"build_date\":\"${now}\"}"  ${version}
+  git push --tags
 fi;
 
