@@ -41,21 +41,29 @@ then
   source project.properties
   for t in "11" "17" "" "19"
   do
-    project="microservices-java${t}-alpine"
-    image_version_tag="${owner}/${project}:${version}"
-    image_latest_tag="${owner}/${project}:latest"
-    echo building ${image_version_tag}
-    pkg=zulu${t}
-    if [[ "$t" == "" ]]; then 
-      pkg="zulu11"
-    fi;
-    docker build --no-cache -t ${image_version_tag} . --build-arg ZULU_PKG=${pkg}
-    docker tag ${image_version_tag} ${image_latest_tag}
+    for u in "-u10k" ""
+    do
+      project="microservices-java${t}-alpine${u}"
+      image_version_tag="${owner}/${project}:${version}"
+      image_latest_tag="${owner}/${project}:latest"
+      echo building ${image_version_tag}
+      pkg=zulu${t}
+      if [[ "$t" == "" ]]; then 
+        pkg="zulu11"
+      fi;
+      usrid="1000"
+      if [[ "$u" == "-u10k" ]];
+      then 
+        usrid="10000"
+      fi;
 
-    if [[ "${push}" == "yes" ]]; then 
-      docker push ${image_version_tag}
-      docker push ${image_latest_tag}
-    fi;
+      docker build --no-cache -t ${image_version_tag} . --build-arg ZULU_PKG=${pkg} --build-arg UID=${usrid}
+      docker tag ${image_version_tag} ${image_latest_tag}
+      if [[ "${push}" == "yes" ]]; then 
+        docker push ${image_version_tag}
+        docker push ${image_latest_tag}
+      fi;
+    done;
   done;
 
   now=$(date '+%Y-%m-%dT%H:%M:%S%z')

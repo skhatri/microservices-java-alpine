@@ -2,6 +2,7 @@ FROM alpine:3.17.1@sha256:f271e74b17ced29b915d351685fd4644785c6d1559dd1f2d4189a5
 
 LABEL base=alpine engine=jvm version=java11 timezone=UTC port=8080 dir=/opt/app user=app
 ARG ZULU_PKG="zulu11"
+ARG UID="1000"
 
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
@@ -23,7 +24,7 @@ RUN mkdir -p /opt/app && ln -s /opt/app /libs && mkdir -p /opt/db-migrations && 
 
 WORKDIR /opt/app
 
-RUN addgroup -g 1000 -S app && adduser -u 1000 -G app -S app \
+RUN addgroup -g ${UID} -S app && adduser -u ${UID} -G app -S app \
 && chown -R app:app /opt/app /libs /opt/db-migrations /flyway
 
 USER app
