@@ -14,7 +14,7 @@ RUN apk update && wget -P /etc/apk/keys/ https://cdn.azul.com/public_keys/alpine
 
 ENV JAVA_HOME=/usr/lib/jvm/${ZULU_PKG}-ca
 
-RUN apk update && apk add --no-cache tzdata curl bash gcompat && rm -rf /var/cache/apk/*
+RUN apk update && apk add --no-cache tzdata bash gcompat && rm -rf /var/cache/apk/*
 ENV TZ=UTC
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
