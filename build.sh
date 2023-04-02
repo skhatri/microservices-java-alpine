@@ -52,12 +52,13 @@ then
         pkg="zulu11"
       fi;
       usrid="1000"
+      dockerfile="Dockerfile"
       if [[ "$u" == "-u10k" ]];
       then 
         usrid="10000"
+        dockerfile="Dockerfile.u10k"
       fi;
-
-      docker build --no-cache -t ${image_version_tag} . --build-arg ZULU_PKG=${pkg} --build-arg UID=${usrid}
+      docker build --no-cache -t ${image_version_tag} . --build-arg ZULU_PKG=${pkg} --build-arg UID=${usrid} -f $dockerfile
       docker tag ${image_version_tag} ${image_latest_tag}
       if [[ "${push}" == "yes" ]]; then 
         docker push ${image_version_tag}
