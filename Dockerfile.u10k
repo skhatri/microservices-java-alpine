@@ -24,9 +24,6 @@ RUN mkdir -p /opt/app && ln -s /opt/app /libs && mkdir -p /opt/db-migrations && 
 
 WORKDIR /opt/app
 
-RUN addgroup -g ${UID} -S app && adduser -u ${UID} -G app -S app \
-&& 
-
 RUN addgroup -g 1000 -S appg && \
     addgroup -g 10000 -S userg && \
     addgroup -g 20000 -S app && \
@@ -37,5 +34,6 @@ RUN addgroup -g 1000 -S appg && \
     chown -R user:app /opt/app /libs /opt/db-migrations /flyway && \
     chmod -R g+rwx /opt/app /libs /opt/db-migrations /flyway
   
-USER app
+USER user
+
 
