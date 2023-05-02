@@ -25,12 +25,11 @@ RUN mkdir -p /opt/app && ln -s /opt/app /libs && mkdir -p /opt/db-migrations && 
 WORKDIR /opt/app
 
 RUN addgroup -g 1000 -S appg && \
-    addgroup -g 10000 -S userg && \
-    addgroup -g 20000 -S app && \
-    adduser -u 1000 -G appg -S app && \
-    adduser -u 10000 -G userg -S user && \
-    adduser app app && \
-    adduser user app && \
+    addgroup -g 10000 -S app && \
+    adduser -u 1000 -G app -S app && \
+    adduser -u 10000 -G app -S user && \
+    # For backward compatibility
+    adduser app appg && \
     chown -R user:app /opt/app /libs /opt/db-migrations /flyway && \
     chmod -R g+rwx /opt/app /libs /opt/db-migrations /flyway
   
