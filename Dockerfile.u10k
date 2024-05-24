@@ -2,7 +2,8 @@ FROM alpine:3.19.1@sha256:c5b1261d6d3e43071626931fc004f70149baeba2c8ec672bd4f277
 
 ARG ZULU_PKG="zulu11"
 ARG UID="1000"
-LABEL base=alpine engine=jvm version=java11 timezone=UTC port=8080 dir=/opt/app user=app uid=${UID}
+ARG JAVA_VERSION="11"
+LABEL base=alpine engine=jvm version=${JAVA_VERSION} timezone=UTC port=8080 dir=/opt/app user=app uid=${UID}
 
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
