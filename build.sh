@@ -8,6 +8,8 @@ current_branch=$(git branch --show-current|sed 's#/#_#')
 version=""
 : "${push:=${1:-yes}}"
 
+platforms="linux/amd64,linux/arm64"
+
 create_tag() {
     if [[ ${current_branch} == "main" ]]; 
     then
@@ -38,6 +40,11 @@ create_tag
 
 if [[ ! -z ${version} ]];
 then
+  # setup for docker creating multi-platform images
+  docker run --privileged --rm tonistiigi/binfmt --install all
+  docker buildx create --use --name builder
+  docker buildx inspect --bootstrap builder
+
   source project.properties
   for t in "11" "17" "" "19"
   do
@@ -58,12 +65,11 @@ then
         usrid="10000"
         dockerfile="Dockerfile.u10k"
       fi;
-      docker build --no-cache -t ${image_version_tag} . --build-arg ZULU_PKG=${pkg} --build-arg UID=${usrid} -f $dockerfile
-      docker tag ${image_version_tag} ${image_latest_tag}
-      if [[ "${push}" == "yes" ]]; then 
-        docker push ${image_version_tag}
-        docker push ${image_latest_tag}
+      image_push=""
+      if [[ "${push}" == "yes" ]]; then
+        image_push="--push"
       fi;
+      docker buildx build --platform "$platforms" --no-cache -t "${image_version_tag}" -t "${image_latest_tag}" . --build-arg ZULU_PKG=${pkg} --build-arg UID=${usrid} "${image_push}" -f $dockerfile
     done;
   done;
 
