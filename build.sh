@@ -69,7 +69,7 @@ then
       if [[ "${push}" == "yes" ]]; then
         image_push="--push"
       fi;
-      docker buildx build --platform "$platforms" --no-cache -t "${image_version_tag}" -t "${image_latest_tag}" . --build-arg ZULU_PKG=${pkg} --build-arg UID=${usrid} "${image_push}" -f $dockerfile
+      docker buildx build --platform "$platforms" --no-cache -t "${image_version_tag}" -t "${image_latest_tag}" . --build-arg ZULU_PKG=${pkg} --build-arg UID=${usrid} --build-arg JAVA_VERSION=${t} "${image_push}" -f $dockerfile
     done;
   done;
 
