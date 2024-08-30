@@ -46,7 +46,7 @@ then
   docker buildx inspect --bootstrap builder
 
   source project.properties
-  for t in "11" "17" "" "19"
+  for t in "11" "17" "" "21"
   do
     for u in "-u10k" ""
     do
