@@ -21,3 +21,31 @@ jobs:
       - name: Build and push
         run: make all
 
+      - name: "Scan ${{env.IMAGE_21_u10k}}"
+        uses: anchore/scan-action@v6
+        with:
+          image: "${{env.IMAGE_21_u10k}}"
+          fail-build: false
+          severity-cutoff: high
+          output-format: table
+          output-file: "scan-report10k.txt"
+
+      - name: "Show ${{env.IMAGE_21_u10k}} Reports"
+        run: |
+          cat scan-report10k.txt
+        shell: bash
+
+      - name: "Scan ${{env.IMAGE_21}}"
+        uses: anchore/scan-action@v6
+        with:
+          image: "${{env.IMAGE_21}}"
+          fail-build: false
+          severity-cutoff: high
+          output-format: table
+          output-file: "scan-report.txt"
+
+      - name: "Show ${{env.IMAGE_21}} Reports"
+        run: |
+          cat scan-report.txt
+        shell: bash
+
