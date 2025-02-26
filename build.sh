@@ -46,7 +46,7 @@ then
   docker buildx inspect --bootstrap builder
 
   source project.properties
-  for t in "11" "17" "" "21"
+  for t in "17" "21"
   do
     for u in "-u10k" ""
     do
@@ -55,20 +55,21 @@ then
       image_latest_tag="${owner}/${project}:latest"
       echo building ${image_version_tag}
       pkg=zulu${t}
-      if [[ "$t" == "" ]]; then 
-        pkg="zulu11"
-      fi;
       usrid="1000"
       dockerfile="Dockerfile"
       if [[ "$u" == "-u10k" ]];
       then 
         usrid="10000"
         dockerfile="Dockerfile.u10k"
+	echo "IMAGE_${t}_u10k=${image_version_tag}" >> $GITHUB_ENV
+      else
+        echo "IMAGE_${t}=${image_version_tag}" >> $GITHUB_ENV
       fi;
       image_push=""
       if [[ "${push}" == "yes" ]]; then
         image_push="--push"
       fi;
+      
       docker buildx build --platform "$platforms" --no-cache -t "${image_version_tag}" -t "${image_latest_tag}" . --build-arg ZULU_PKG=${pkg} --build-arg UID=${usrid} --build-arg JAVA_VERSION=${t} "${image_push}" -f $dockerfile
     done;
   done;
