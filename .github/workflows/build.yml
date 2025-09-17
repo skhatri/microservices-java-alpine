@@ -22,7 +22,7 @@ jobs:
         run: make all
 
       - name: "Scan ${{env.IMAGE_21_u10k}}"
-        uses: anchore/scan-action@v6
+        uses: anchore/scan-action@v7
         with:
           image: "${{env.IMAGE_21_u10k}}"
           fail-build: false
@@ -36,7 +36,7 @@ jobs:
         shell: bash
 
       - name: "Scan ${{env.IMAGE_21}}"
-        uses: anchore/scan-action@v6
+        uses: anchore/scan-action@v7
         with:
           image: "${{env.IMAGE_21}}"
           fail-build: false
